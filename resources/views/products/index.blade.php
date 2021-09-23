@@ -1,3 +1,22 @@
+
+<style>
+.zoom {
+  transition: transform .2s; /* Animation */
+  width: 100px;
+  margin: 0 auto;
+}
+
+.zoom:hover {
+  transform: scale(1.5); /* (150% zoom)*/
+}
+
+img:hover {
+transform: scale(2.3);
+}
+</style>
+
+
+
 @extends('admin/layout')
 @section('page_title','Product')
 @section('product_select','active')
@@ -15,7 +34,7 @@
 <div class="card-header">
     <div class="row">
         <div class="col">
-            <h2>product</h2>
+            <h4>product</h4>
         </div>
         <div class="mr-0">
             <a href="{{ route('product.create') }}">
@@ -27,7 +46,7 @@
 <!-- DATA TABLE-->
 <div class="card">
     <div class="card-body">
-        <table class="table table-border table-responsive-sm table-data3">
+        <table class="table table-border table-responsive-sm table-stripped">
             <thead>
                 <tr>
                     <th>#</th>
@@ -35,15 +54,15 @@
                     <th>Name</th>
                     <th>Slug</th>
                     <th>Image</th>
-                    <!-- <th>Model</th>
-                <th>Short Desc</th>
+                    <th>Model</th>
+                    <!-- <th>Short Desc</th>
                 <th>Desc</th>
                 <th>Keywords</th>
                 <th>Technical Specification</th>
                 <th>Uses</th>
                 <th>Warranty</th> -->
                     <th>Status</th>
-                    <th class="text-center">Action</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,13 +73,17 @@
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->slug }}</td>
                     <td>
-                        @if($product->image != '')
-                        <img width="100px" height="50px" src="{{ asset('/storage/media/'.$product->image) }}" alt="">
+                        <div class="zoom">
+                            @if($product->image != '')
+                            <img width="100px" height="50px" src="{{ asset('/storage/media/'.$product->image) }}"
+                                alt="">
+                            @endif
+                        </div>
                     </td>
-                    @endif
 
-                    <!-- <td>{{ $product->model }}</td>
-                <td>{{ $product->short_desc }}</td>
+
+                    <td>{{ $product->model }}</td>
+                    <!--  <td>{{ $product->short_desc }}</td>
                 <td>{{ $product->desc }}</td>
                 <td>{{ $product->keywords }}</td>
                 <td>{{ $product->technical_specification }}</td>

@@ -2,6 +2,11 @@
 @section('page_title','coupon-create')
 @section('content')
 
+@if($id>0)
+        {{$image_required=""}}
+    @else
+        {{$image_required="required"}}
+    @endif
 <div class=" card-header">
     <div class="row">
         <div class="col">
@@ -73,51 +78,54 @@
                 <!--image-->
                 <div class="col-md-4">
                     <label name="image">Image :</label>
-                    <input type="file" name="image" class="form-control" require>
+                <input type="file" name="image" class="form-control" value="{{ $image_required }}" require>
                     @error('image')
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-            <!--short_desc-->
-            <div class="col">
-                <label name="short_desc">Short Desc :</label>
-                <textarea type="text" name="short_desc" class="form-control" required></textarea>
-                @error('short_desc')
-                <p class="text text-danger">{{ $message }}</p>
-                @enderror
-            </div>
+            
+                <!--short_desc-->
+                <div class="col">
+                    <label name="short_desc">Short Desc :</label>
+                    <textarea type="text" name="short_desc" class="form-control" required></textarea>
+                    @error('short_desc')
+                    <p class="text text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <!--desc-->
-            <div class="col">
-                <label name="desc">Desc :</label>
-                <textarea type="text" name="desc" class="form-control" required></textarea>
-                @error('desc')
-                <p class="text text-danger">{{ $message }}</p>
-                @enderror
-            </div>
+                <!--desc-->
+                <div class="col">
+                    <label name="desc">Desc :</label>
+                    <textarea type="text" name="desc" class="form-control" required></textarea>
+                    @error('desc')
+                    <p class="text text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <!--keywords-->
-            <div class="col">
-                <label name="keywords">Keywords :</label>
-                <textarea type="text" name="keywords" class="form-control" required></textarea>
-                @error('keywords')
-                <p class="text text-danger">{{ $message }}</p>
-                @enderror
-            </div>
+                <!--keywords-->
+                <div class="col">
+                    <label name="keywords">Keywords :</label>
+                    <textarea type="text" name="keywords" class="form-control" required></textarea>
+                    @error('keywords')
+                    <p class="text text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <!--technical_specification-->
-            <div class="col">
-                <label name="technical_specification">Technical Specification :</label>
-                <textarea type="text" name="technical_specification" class="form-control" required></textarea>
-                @error('technical_specification')
-                <p class="text text-danger">{{ $message }}</p>
-                @enderror
-            </div>
+                <!--technical_specification-->
+                <div class="col">
+                    <label name="technical_specification">Technical Specification :</label>
+                    <textarea type="text" name="technical_specification" class="form-control" required></textarea>
+                    @error('technical_specification')
+                    <p class="text text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+            
+
             <div class="row">
 
                 <!--uses-->
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <label name="uses">uses :</label>
                     <input type="text" name="uses" class="form-control" required>
                     @error('uses')
@@ -126,7 +134,7 @@
                 </div>
 
                 <!--warranty-->
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <label name="warranty">warranty :</label>
                     <input type="text" name="warranty" class="form-control" required>
                     @error('warranty')
@@ -134,16 +142,84 @@
                     @enderror
                 </div>
             </div>
-            <div class="card mt-4">
-                <div class="card-body">
-                    heklskdsdjsn
-                </div>
-
-            </div>
-            <div class="mr-0 mt-2">
-                <button type="submit" value="submit" class="btn btn-primary pull-right">Submit</button>
-            </div>
-        </form>
     </div>
 </div>
+
+<p><b>Product Attribute</b></p>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <!--Product id-->
+            <div class="col-md-2">
+                <label name="product_id">Product id :</label>
+                <input type="text" name="product_id" class="form-control" required>
+                @error('product_id')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!--image-->
+            <div class="col-md-4">
+                <label name="image">Image :</label>
+                <input type="file" name="image" class="form-control" required>
+                @error('image')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!--sku-->
+            <div class="col-md-2">
+                <label name="sku">Sku :</label>
+                <input type="text" name="sku" class="form-control" required>
+                @error('sku')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!--price-->
+            <div class="col-md-2">
+                <label name="price">price :</label>
+                <input type="text" name="price" class="form-control" required>
+                @error('price')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!--price-->
+            <div class="col-md-2">
+                <label name="qty">Quantity :</label>
+                <input type="text" name="qty" class="form-control" required>
+                @error('qty')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
+        <div class="row">
+            <!--size_id-->
+            <div class="col-md-6">
+                <label name="size_id">Size Id :</label>
+                <input type="text" name="size_id" class="form-control" required>
+                @error('size_id')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!--color_id-->
+            <div class="col-md-6">
+                <label name="color_id">Color Id :</label>
+                <input type="text" name="color_id" class="form-control" required>
+                @error('color_id')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="mr-0 mt-2">
+    <button type="submit" value="submit" class="btn btn-primary pull-right">Submit</button>
+</div>
+<input type="hidden" name="id" value="{{$id}}" />
+</form>
+
 @endsection

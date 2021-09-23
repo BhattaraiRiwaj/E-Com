@@ -14,7 +14,7 @@
 <div class="card-header">
 <div class="row">
     <div class="col">
-        <h2>Size</h2>
+        <h4>Size</h4>
     </div>
     <div class="mr-0">
         <a href="{{ route('size.create') }}">

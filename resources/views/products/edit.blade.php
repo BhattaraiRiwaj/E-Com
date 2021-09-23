@@ -139,11 +139,84 @@
                     @enderror
                 </div>
             </div>
-            <div class="mr-0 mt-4">
-                <button type="submit" value="submit" class="btn btn-primary pull-right">Update</button>
-            </div>
-        </form>
     </div>
 </div>
+
+<p><b>Product Attribute</b></p>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <!--Product id-->
+            <div class="col-md-2">
+                <label name="product_id">Product id :</label>
+                <input type="text" name="product_id" class="form-control" required>
+                @error('product_id')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!--image-->
+            <div class="col-md-4">
+                <label name="image">Image :</label>
+                <input type="file" name="image" class="form-control" required>
+                @error('image')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!--sku-->
+            <div class="col-md-2">
+                <label name="sku">Sku :</label>
+                <input type="text" name="sku" class="form-control" required>
+                @error('sku')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!--price-->
+            <div class="col-md-2">
+                <label name="price">price :</label>
+                <input type="text" name="price" class="form-control" required>
+                @error('price')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!--price-->
+            <div class="col-md-2">
+                <label name="qty">Quantity :</label>
+                <input type="text" name="qty" class="form-control" required>
+                @error('qty')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
+        <div class="row">
+            <!--size_id-->
+            <div class="col-md-6">
+                <label name="size_id">Size Id :</label>
+                <input type="text" name="size_id" class="form-control" required>
+                @error('size_id')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!--color_id-->
+            <div class="col-md-6">
+                <label name="color_id">Color Id :</label>
+                <input type="text" name="color_id" class="form-control" required>
+                @error('color_id')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="mr-0 mt-4">
+    <button type="submit" value="submit" class="btn btn-primary pull-right">Update</button>
+</div>
+</form>
+
 
 @endsection

@@ -24,10 +24,44 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request,$id='')
     {
+        if($id>0){
+            $arr=Product::where(['id'=>$id])->get(); 
+
+            $result['category_id']=$arr['0']->category_id;
+            $result['name']=$arr['0']->name;
+            $result['image']=$arr['0']->image;
+            $result['slug']=$arr['0']->slug;
+            $result['brand']=$arr['0']->brand;
+            $result['model']=$arr['0']->model;
+            $result['short_desc']=$arr['0']->short_desc;
+            $result['desc']=$arr['0']->desc;
+            $result['keywords']=$arr['0']->keywords;
+            $result['technical_specification']=$arr['0']->technical_specification;
+            $result['uses']=$arr['0']->uses;
+            $result['warranty']=$arr['0']->warranty;
+            $result['status']=$arr['0']->status;
+            $result['id']=$arr['0']->id;
+        }else{
+            $result['category_id']='';
+            $result['name']='';
+            $result['slug']='';
+            $result['image']='';
+            $result['brand']='';
+            $result['model']='';
+            $result['short_desc']='';
+            $result['desc']='';
+            $result['keywords']='';
+            $result['technical_specification']='';
+            $result['uses']='';
+            $result['warranty']='';
+            $result['status']='';
+            $result['id']=0;
+        }
         $products = DB::table('categories')->where(['status'=>1])->get();
-        return view('products.create',compact('products'));
+        
+        return view('products.create',compact('products'),$result);
     }
 
     /**
@@ -36,7 +70,7 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request,$id='')
     {
        $request->validate([
            'name'=>'required',

@@ -5,7 +5,7 @@
 <div class="card-header">
 <div class="row">
     <div class="col">
-        <h2>Category</h2>
+        <h4>Category</h4>
     </div>
     <div class="mr-0">
         <a href="{{ route('manage_category') }}">

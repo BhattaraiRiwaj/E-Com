@@ -15,7 +15,7 @@
 <div class="card-header">
     <div class="row">
         <div class="col">
-            <h2>Color</h2>
+            <h4>Color</h4>
         </div>
         <div class="mr-0">
             <a href="{{ route('color.create') }}">

@@ -2,5 +2,13 @@
 @section('page_title','dashboard')
 @section('dashboard_select','active')
 @section('content')
-        <h3 class="text-center">Hello Dashboard</h3>
+<div class="card-header">
+    <h4>Dashboard</h4>
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+    </div>
+</div>
 @endsection
