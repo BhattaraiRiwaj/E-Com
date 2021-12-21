@@ -2,7 +2,11 @@
 @section('page_title','product-edit')
 @section('content')
 
-
+@if($id>0)
+        {{$image_required = ""}}
+    @else
+        {{$image_required="required"}}
+    @endif
 <div class="card-header">
     <div class="row">
         <div class="col">
@@ -17,7 +21,7 @@
 
 <div class="card">
     <div class="card-body">
-        <form action="{{ route('product.update',$products->id) }}" method="post">
+        <form action="{{ route('product.update',$products->id) }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <!--category_id-->
@@ -133,10 +137,10 @@
                 <!--image-->
                 <div class="col-md-4">
                     <label name="image">Image :</label>
-                    <input type="file" name="image" class="form-control" value="{{ $products->image}}">
-                    @error('image')
+                    <input type="file" name="image" class="form-control" value="{{ $products->image}}" {{ $image_required }}>
+                    <!-- @error('image')
                     <p class="text text-danger">{{ $message }}</p>
-                    @enderror
+                    @enderror -->
                 </div>
             </div>
     </div>
@@ -147,27 +151,20 @@
     <div class="card-body">
         <div class="row">
             <!--Product id-->
-            <div class="col-md-2">
+            <!-- <div class="col-md-2">
                 <label name="product_id">Product id :</label>
                 <input type="text" name="product_id" class="form-control" required>
                 @error('product_id')
                 <p class="text text-danger">{{ $message }}</p>
                 @enderror
-            </div>
+            </div> -->
 
-            <!--image-->
-            <div class="col-md-4">
-                <label name="image">Image :</label>
-                <input type="file" name="image" class="form-control" required>
-                @error('image')
-                <p class="text text-danger">{{ $message }}</p>
-                @enderror
-            </div>
+
 
             <!--sku-->
             <div class="col-md-2">
                 <label name="sku">Sku :</label>
-                <input type="text" name="sku" class="form-control" required>
+                <input type="text" name="sku" class="form-control" value="{{ }}" required>
                 @error('sku')
                 <p class="text text-danger">{{ $message }}</p>
                 @enderror
@@ -182,6 +179,15 @@
                 @enderror
             </div>
 
+            <!--mrp-->
+            <div class="col-md-2">
+                <label name="mrp">MRP :</label>
+                <input type="text" name="mrp" class="form-control" required>
+                @error('mrp')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+
             <!--price-->
             <div class="col-md-2">
                 <label name="qty">Quantity :</label>
@@ -190,29 +196,48 @@
                 <p class="text text-danger">{{ $message }}</p>
                 @enderror
             </div>
+                        <!--image-->
+                        <div class="col-md-4">
+                <label name="image">Image :</label>
+                <input type="file" name="image" class="form-control" required>
+                @error('image')
+                <p class="text text-danger">{{ $message }}</p>
+                @enderror
+            </div>
         </div>
         <div class="row">
             <!--size_id-->
             <div class="col-md-6">
-                <label name="size_id">Size Id :</label>
-                <input type="text" name="size_id" class="form-control" required>
-                @error('size_id')
-                <p class="text text-danger">{{ $message }}</p>
-                @enderror
-            </div>
+                    <label name="size_id">Size :</label>
+                    <select name="size_id" class="form-control">
+                        <option value=" Select Sizes " disabled selected>Select Sizes</option>
+                        @foreach($sizes as $key=>$size)
+                        <option value="{{ $size->id }}">{{ $size->size }}</option>
+                        @endforeach
+                    </select>
+                    @error('size_id')
+                    <p class="text text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
 
             <!--color_id-->
             <div class="col-md-6">
-                <label name="color_id">Color Id :</label>
-                <input type="text" name="color_id" class="form-control" required>
-                @error('color_id')
-                <p class="text text-danger">{{ $message }}</p>
-                @enderror
-            </div>
+                    <label name="color_id">Colors :</label>
+                    <select name="color_id" class="form-control">
+                        <option value=" Select Colors " disabled selected>Select Colors</option>
+                        @foreach($colors as $key=>$color)
+                        <option value="{{ $color->id }}">{{ $color->color }}</option>
+                        @endforeach
+                    </select>
+                    @error('color_id')
+                    <p class="text text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
         </div>
     </div>
 
 </div>
+
 <div class="mr-0 mt-4">
     <button type="submit" value="submit" class="btn btn-primary pull-right">Update</button>
 </div>

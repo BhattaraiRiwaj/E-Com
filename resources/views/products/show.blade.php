@@ -4,7 +4,7 @@
 <div class="card-header">
     <div class="row">
         <div class="col">
-            <h4>Coupen Show</h4>
+            <h4>Products Show</h4>
         </div>
         <div class="mr-0">
             <a href="{{ route('product.index') }}" class="btn btn-light">Back</a>

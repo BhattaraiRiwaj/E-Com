@@ -17,7 +17,8 @@ class ProductAttribute extends Migration
                 $table->integer('id');
                 $table->integer('product_id');
                 $table->integer('sku');
-                $table->integer('image');
+                $table->integer('attr_image');
+                $table->string('mrp');
                 $table->integer('price');
                 $table->integer('qty');
                 $table->integer('size_id');

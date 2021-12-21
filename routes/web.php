@@ -82,14 +82,14 @@ Route::group(['middleware' => 'admin_auth'], function () {
 
 
     //product Routes
-    Route::get('product', [ProductController::class, 'index'])->name('product.index');
-    Route::get('product/create', [ProductController::class, 'create'])->name('product.create');
-    Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
-    Route::get('product/show/{id}', [ProductController::class, 'show'])->name('product.show');
-    Route::get('product/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
-    Route::post('product/update/{id}', [ProductController::class, 'update'])->name('product.update');
-    Route::get('product/destroy/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
-    Route::get('product/status/{status}/{id}', [ProductController::class, 'status'])->name('product.status');
+    Route::get('product',[ProductController::class,'index'])->name('product.index');
+    Route::get('product/manage_product',[ProductController::class,'manage_product'])->name('product.manage_product');
+    Route::get('product/manage_product/{id}',[ProductController::class,'manage_product'])->name('product.edit');
+    Route::post('product/manage_producty_process',[ProductController::class,'manage_product_process'])->name('product.manage_product_process');
+    Route::get('product/show/{id}',[ProductController::class,'show'])->name('product.show');
+    Route::get('product/delete/{id}',[ProductController::class,'delete'])->name('product.destroy');
+    Route::get('product/status/{status}/{id}',[ProductController::class,'status'])->name('product.status');
+    Route::get('product/product_attr_delete/{paid}/{pid}',[ProductController::class,'product_attr_delete']);
 
 
 });

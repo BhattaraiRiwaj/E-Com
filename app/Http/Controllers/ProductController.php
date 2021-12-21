@@ -8,23 +8,14 @@ use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $products = Product::get();
-        return view('products.index',compact('products'));
+        $result['data']=Product::all();
+        return view('products.index',$result);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request,$id='')
+    
+    public function manage_product(Request $request,$id='')
     {
         if($id>0){
             $arr=Product::where(['id'=>$id])->get(); 
@@ -43,6 +34,8 @@ class ProductController extends Controller
             $result['warranty']=$arr['0']->warranty;
             $result['status']=$arr['0']->status;
             $result['id']=$arr['0']->id;
+
+            $result['productAttrArr']=DB::table('products_attribute')->where(['product_id'=>$id])->get();
         }else{
             $result['category_id']='';
             $result['name']='';
@@ -58,156 +51,143 @@ class ProductController extends Controller
             $result['warranty']='';
             $result['status']='';
             $result['id']=0;
+
+            $result['productAttrArr'][0]['id']='';
+            $result['productAttrArr'][0]['product_id']='';
+            $result['productAttrArr'][0]['sku']='';
+            $result['productAttrArr'][0]['attr_image']='';
+            $result['productAttrArr'][0]['mrp']='';
+            $result['productAttrArr'][0]['price']='';
+            $result['productAttrArr'][0]['qty']='';
+            $result['productAttrArr'][0]['size_id']='';
+            $result['productAttrArr'][0]['color_id']='';
+
+            /*echo '<pre>';
+            print_r( $result['productAttrArr']);
+            die();*/
         }
-        $products = DB::table('categories')->where(['status'=>1])->get();
         
-        return view('products.create',compact('products'),$result);
+        $result['category']=DB::table('categories')->where(['status'=>1])->get();
+
+        $result['sizes']=DB::table('sizes')->where(['status'=>1])->get();
+
+        $result['colors']=DB::table('colors')->where(['status'=>1])->get();
+        return view('products.create',$result);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request,$id='')
+    public function manage_product_process(Request $request)
     {
-       $request->validate([
-           'name'=>'required',
-           'slug'=>'required|unique:products',
-           'brand'=>'required',
-           'model'=>'required',
-           'short_desc'=>'required',
-           'desc'=>'required',
-           'keywords'=>'required',
-           'technical_specification'=>'required',
-           'uses'=>'required',
-           'warranty'=>'required',
-           'image'=>'required|mimes:jpeg,png,gif,jpg'
-       ]);
+        //return $request->post();
+        // echo '<pre>';
+        // print_r($request->post());
+        // die();
+        if($request->post('id')>0){
+            $image_validation="mimes:jpeg,jpg,png";
+        }else{
+            $image_validation="required|mimes:jpeg,jpg,png";
+        }
+        $request->validate([
+            'name'=>'required',
+            'image'=>$image_validation,
+            'slug'=>'required|unique:products,slug,'.$request->post('id'),   
+        ]);
 
-       $products = new Product();
-    if($request->hasFile('image')){
-        $image = $request->file('image');
-        $ext = $image->extension();
-        $image_name = time().'.'.$ext;
-        $image->storeAs('/public/media',$image_name);
-        $products->image = $image_name;
+        if($request->post('id')>0){
+            $model=Product::find($request->post('id'));
+            $msg="Product updated";
+        }else{
+            $model=new Product();
+            $msg="Product inserted";
+        }
+
+        if($request->hasfile('image')){
+            $image=$request->file('image');
+            $ext=$image->extension();
+            $image_name=time().'.'.$ext;
+            $image->storeAs('/public/media',$image_name);
+            $model->image=$image_name;
+        }
+
+        $model->category_id=$request->post('category_id');;
+        $model->name=$request->post('name');
+        $model->slug=$request->post('slug');
+        $model->brand=$request->post('brand');
+        $model->model=$request->post('model');
+        $model->short_desc=$request->post('short_desc');
+        $model->desc=$request->post('desc');
+        $model->keywords=$request->post('keywords');
+        $model->technical_specification=$request->post('technical_specification');
+        $model->uses=$request->post('uses');
+        $model->warranty=$request->post('warranty');
+        $model->status=1;
+        $model->save();
+        $pid=$model->id;
+        /*Product Attr Start*/ 
+        $paidArr=$request->post('paid'); 
+        $skuArr=$request->post('sku'); 
+        $mrpArr=$request->post('mrp'); 
+        $priceArr=$request->post('price'); 
+        $qtyArr=$request->post('qty'); 
+        $size_idArr=$request->post('size_id'); 
+        $color_idArr=$request->post('color_id'); 
+        foreach($skuArr as $key=>$val){
+            $productAttrArr['product_id']=$pid;
+            $productAttrArr['sku']=$skuArr[$key];
+            $productAttrArr['attr_image']='test';
+            $productAttrArr['mrp']=$mrpArr[$key];
+            $productAttrArr['price']=$priceArr[$key];
+            $productAttrArr['qty']=$qtyArr[$key];
+            if($size_idArr[$key]==''){
+                $productAttrArr['size_id']=0;
+            }else{
+                $productAttrArr['size_id']=$size_idArr[$key];
+            }
+
+            if($color_idArr[$key]==''){
+                $productAttrArr['color_id']=0;
+            }else{
+                $productAttrArr['color_id']=$color_idArr[$key];
+            }
+            if($paidArr[$key]!=''){
+                DB::table('products_attribute')->where(['id'=>$paidArr[$key]])->update($productAttrArr);
+            }else{
+                DB::table('products_attribute')->insert($productAttrArr);
+            }
+            
+        }  
+        /*Product Attr End*/ 
+        
+
+        $request->session()->flash('message',$msg);
+        return redirect('product');
+        
     }
-       $products->category_id = $request->post('category_id');
-       $products->name = $request->post('name');
-       $products->slug = $request->post('slug');
-       $products->brand = $request->post('brand');
-       $products->model = $request->post('model');
-       $products->short_desc = $request->post('short_desc');
-       $products->desc = $request->post('desc');
-       $products->keywords = $request->post('keywords');
-       $products->technical_specification = $request->post('technical_specification');
-       $products->uses = $request->post('uses');
-       $products->warranty = $request->post('warranty');
-       $products->status = 1;
-       $products->save();
 
-       $request->session()->flash('message','Product Saved Successfully');
-       return redirect('product');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request, $id)
+    public function show(Request $request,$id)
     {
         $products = Product::find($id);
+
         return view('products.show',compact('products'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request, $id)
-    {
-        $products = Product::find($id);
-        $categories = DB::table('categories')->where(['status'=>1])->get();
-        return view('products.edit',compact('products','categories'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name'=>'required',
-            'slug'=>'required|unique:products,slug,' .$request->id,
-            'brand'=>'required',
-            'model'=>'required',
-            'short_desc'=>'required',
-            'desc'=>'required',
-            'keywords'=>'required',
-            'technical_specification'=>'required',
-            'uses'=>'required',
-            'warranty'=>'required',
-            // 'image'=>'required'
-        ]);
- 
-        $products = Product::find($id);
-        // $products->id = $request->post('id');
-        $products->category_id = $request->post('category_id');
-        $products->name = $request->post('name');
-        $products->slug = $request->post('slug');
-        $products->brand = $request->post('brand');
-        $products->model = $request->post('model');
-        $products->short_desc = $request->post('short_desc');
-        $products->desc = $request->post('desc');
-        $products->keywords = $request->post('keywords');
-        $products->technical_specification = $request->post('technical_specification');
-        $products->uses = $request->post('uses');
-        $products->warranty = $request->post('warranty');
-        $products->image = $request->post('image');
-        $products->status = 1;
-        $products->save();
- 
-        $request->session()->flash('message','Product Updated Successfully');
+    public function delete(Request $request,$id){
+        $model=Product::find($id);
+        $model->delete();
+        $request->session()->flash('message','Product deleted');
         return redirect('product');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request, $id)
-    {
-        $products = Product::find($id);
-        $products->delete();
-
-        $request->session()->flash('message','Product Deleted Successfully!!');
-        return redirect('product');
+    public function product_attr_delete(Request $request,$paid,$pid){
+        DB::table('products_attribute')->where(['id'=>$paid])->delete();
+        return redirect('product/manage_product/'.$pid);
     }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function status(Request $request,$status, $id)
-    {
-        $products = Product::find($id);
-        $products->status = $status;
-        $products->save();
+    
 
-        $request->session()->flash('message','Product Status Updated Successfully!!');
+    public function status(Request $request,$status,$id){
+        $model=Product::find($id);
+        $model->status=$status;
+        $model->save();
+        $request->session()->flash('message','Product status updated');
         return redirect('product');
     }
 }
